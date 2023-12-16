@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import com.min01.archaeology.misc.DecoratedPotMaterials;
 import com.min01.archaeology.misc.DecoratedPotPatterns;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -55,7 +54,7 @@ public class DecoratedPotRenderer implements BlockEntityRenderer<DecoratedPotBlo
    public static final ModelLayerLocation DECORATED_POT_BASE = new ModelLayerLocation(new ResourceLocation("decorated_pot_base"), "main");
    public static final ModelLayerLocation DECORATED_POT_SIDES = new ModelLayerLocation(new ResourceLocation("decorated_pot_sides"), "main");
    public static final ResourceLocation DECORATED_POT_SHEET = InventoryMenu.BLOCK_ATLAS; //new ResourceLocation("textures/atlas/decorated_pot.png");
-   public static final Map<ResourceKey<String>, Material> DECORATED_POT_MATERIALS = DecoratedPotMaterials.SET.stream().collect(Collectors.toMap(Function.identity(), DecoratedPotRenderer::createDecoratedPotMaterial));
+   public static final Map<ResourceKey<String>, Material> DECORATED_POT_MATERIALS = DecoratedPotPatterns.bootstrap().stream().collect(Collectors.toMap(Function.identity(), DecoratedPotRenderer::createDecoratedPotMaterial));
    
    public DecoratedPotRenderer(BlockEntityRendererProvider.Context p_272872_) {
       ModelPart modelpart = p_272872_.bakeLayer(DECORATED_POT_BASE);

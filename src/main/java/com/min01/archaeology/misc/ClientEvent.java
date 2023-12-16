@@ -1,5 +1,7 @@
 package com.min01.archaeology.misc;
 
+import java.util.Map.Entry;
+
 import com.min01.archaeology.Archaeology;
 import com.min01.archaeology.blockentity.BrushableBlockRenderer;
 import com.min01.archaeology.blockentity.DecoratedPotRenderer;
@@ -37,9 +39,9 @@ public class ClientEvent
     @SubscribeEvent
     public static void onTextureStitchEvent(TextureStitchEvent.Pre event)
     {
- 	   for(ResourceKey<String> key : DecoratedPotPatterns.PATTERNS_REGISTRY)
+ 	   for(Entry<ResourceKey<String>, String> key : PotPattensRegistry.PATTERNS_REGISTRY.entrySet())
  	   {
- 		   event.addSprite(DecoratedPotPatterns.location(key));
+ 		   event.addSprite(DecoratedPotPatterns.location(key.getKey()));
  	   }
     }
     
