@@ -1,6 +1,8 @@
 package com.min01.archaeology.misc;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,44 +63,29 @@ public class DecoratedPotPatterns {
    public static final ResourceKey<String> SKULL = create("skull_pottery_pattern");
    public static final ResourceKey<String> SNORT = create("snort_pottery_pattern");
    private static final Map<Item, ResourceKey<String>> ITEM_TO_POT_TEXTURE = Map.ofEntries(Map.entry(Items.BRICK, BRICK), Map.entry(ArchaeologyItems.ANGLER_POTTERY_SHERD.get(), ANGLER), Map.entry(ArchaeologyItems.ARCHER_POTTERY_SHERD.get(), ARCHER), Map.entry(ArchaeologyItems.ARMS_UP_POTTERY_SHERD.get(), ARMS_UP), Map.entry(ArchaeologyItems.BLADE_POTTERY_SHERD.get(), BLADE), Map.entry(ArchaeologyItems.BREWER_POTTERY_SHERD.get(), BREWER), Map.entry(ArchaeologyItems.BURN_POTTERY_SHERD.get(), BURN), Map.entry(ArchaeologyItems.DANGER_POTTERY_SHERD.get(), DANGER), Map.entry(ArchaeologyItems.EXPLORER_POTTERY_SHERD.get(), EXPLORER), Map.entry(ArchaeologyItems.FRIEND_POTTERY_SHERD.get(), FRIEND), Map.entry(ArchaeologyItems.HEART_POTTERY_SHERD.get(), HEART), Map.entry(ArchaeologyItems.HEARTBREAK_POTTERY_SHERD.get(), HEARTBREAK), Map.entry(ArchaeologyItems.HOWL_POTTERY_SHERD.get(), HOWL), Map.entry(ArchaeologyItems.MINER_POTTERY_SHERD.get(), MINER), Map.entry(ArchaeologyItems.MOURNER_POTTERY_SHERD.get(), MOURNER), Map.entry(ArchaeologyItems.PLENTY_POTTERY_SHERD.get(), PLENTY), Map.entry(ArchaeologyItems.PRIZE_POTTERY_SHERD.get(), PRIZE), Map.entry(ArchaeologyItems.SHEAF_POTTERY_SHERD.get(), SHEAF), Map.entry(ArchaeologyItems.SHELTER_POTTERY_SHERD.get(), SHELTER), Map.entry(ArchaeologyItems.SKULL_POTTERY_SHERD.get(), SKULL), Map.entry(ArchaeologyItems.SNORT_POTTERY_SHERD.get(), SNORT));
+   public static final List<ResourceKey<String>> PATTERNS_REGISTRY = new ArrayList<>();
    
    private static ResourceKey<String> create(String p_272919_) {
-      return ResourceKey.create(ArchaeologyRegistryKey.DECORATED_POT_PATTERNS, new ResourceLocation(p_272919_));
+	   ResourceKey<String> key = ResourceKey.create(ArchaeologyRegistryKey.DECORATED_POT_PATTERNS, new ResourceLocation(p_272919_));
+	   PATTERNS_REGISTRY.add(key);
+	   return key;
    }
 
    public static ResourceLocation location(ResourceKey<String> p_273198_) {
-      return new ResourceLocation("entity/decorated_pot/" + p_273198_.location().getPath());
+	   return new ResourceLocation("entity/decorated_pot/" + p_273198_.location().getPath());
    }
 
    @Nullable
    public static ResourceKey<String> getResourceKey(Item p_273094_) {
-      return ITEM_TO_POT_TEXTURE.get(p_273094_);
+	   return ITEM_TO_POT_TEXTURE.get(p_273094_);
    }
 
    public static Set<ResourceKey<String>> bootstrap() {
 	   Set<ResourceKey<String>> set = new HashSet<>();
-	   set.add(BRICK); 
-	   set.add(ANGLER);
-	   set.add(ARCHER);
-	   set.add(ARMS_UP);
-	   set.add(BLADE); 
-	   set.add(BREWER);
-	   set.add(BURN);
-	   set.add(DANGER);
-	   set.add(EXPLORER);
-	   set.add(FRIEND);
-	   set.add(HEART);
-	   set.add(HEARTBREAK);
-	   set.add(HOWL);
-	   set.add(MINER); 
-	   set.add(MOURNER);
-	   set.add(PLENTY);
-	   set.add(PRIZE);
-	   set.add(SHEAF);
-	   set.add(SHELTER);
-	   set.add(SKULL);
-	   set.add(SNORT);
-	   set.add(BASE);
+	   for(ResourceKey<String> key : PATTERNS_REGISTRY)
+	   {
+		   set.add(key);
+	   }
 	   return set;
    }
 }

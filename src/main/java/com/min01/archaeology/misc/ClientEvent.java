@@ -10,6 +10,7 @@ import com.min01.archaeology.init.ArchaeologyItems;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -36,28 +37,10 @@ public class ClientEvent
     @SubscribeEvent
     public static void onTextureStitchEvent(TextureStitchEvent.Pre event)
     {
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.BRICK)); 
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.ANGLER));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.ARCHER));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.ARMS_UP));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.BLADE)); 
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.BREWER));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.BURN));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.DANGER));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.EXPLORER));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.FRIEND));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.HEART));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.HEARTBREAK));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.HOWL));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.MINER)); 
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.MOURNER));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.PLENTY));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.PRIZE));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.SHEAF));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.SHELTER));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.SKULL));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.SNORT));
-    	event.addSprite(DecoratedPotPatterns.location(DecoratedPotPatterns.BASE));
+ 	   for(ResourceKey<String> key : DecoratedPotPatterns.PATTERNS_REGISTRY)
+ 	   {
+ 		   event.addSprite(DecoratedPotPatterns.location(key));
+ 	   }
     }
     
     @SubscribeEvent
