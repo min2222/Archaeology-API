@@ -1,0 +1,259 @@
+{
+    "item.brush.brushing.generic": {
+        "sounds": [
+            {
+                "name": "minecraft:item/brush/brushing_generic1",
+                "pitch": 0.8,
+                "volume": 0.4
+            },
+            {
+                "name": "minecraft:item/brush/brushing_generic2",
+                "pitch": 0.8,
+                "volume": 0.4
+            },
+            {
+                "name": "minecraft:item/brush/brushing_generic3",
+                "pitch": 0.8,
+                "volume": 0.4
+            },
+            {
+                "name": "minecraft:item/brush/brushing_generic4",
+                "pitch": 0.8,
+                "volume": 0.4
+            }
+        ],
+        "subtitle": "subtitles.item.brush.brushing.generic"
+    },
+    "item.brush.brushing.gravel": {
+        "sounds": [
+            {
+                "name": "minecraft:item/brush/brushing_gravel1",
+                "pitch": 0.6,
+                "volume": 0.6
+            },
+            {
+                "name": "minecraft:item/brush/brushing_gravel2",
+                "pitch": 0.6,
+                "volume": 0.6
+            },
+            {
+                "name": "minecraft:item/brush/brushing_gravel3",
+                "pitch": 0.6,
+                "volume": 0.6
+            },
+            {
+                "name": "minecraft:item/brush/brushing_gravel4",
+                "pitch": 0.6,
+                "volume": 0.6
+            }
+        ],
+        "subtitle": "subtitles.item.brush.brushing.gravel"
+    },
+    "item.brush.brushing.gravel.complete": {
+        "sounds": [
+            "minecraft:item/brush/brushing_gravel_complete1",
+            "minecraft:item/brush/brushing_gravel_complete2",
+            "minecraft:item/brush/brushing_gravel_complete3",
+            "minecraft:item/brush/brushing_gravel_complete4"
+        ],
+        "subtitle": "subtitles.item.brush.brushing.gravel.complete"
+    },
+    "item.brush.brushing.sand": {
+        "sounds": [
+            {
+                "name": "minecraft:item/brush/brushing_sand1",
+                "pitch": 0.6,
+                "volume": 0.6
+            },
+            {
+                "name": "minecraft:item/brush/brushing_sand2",
+                "pitch": 0.6,
+                "volume": 0.6
+            },
+            {
+                "name": "minecraft:item/brush/brushing_sand3",
+                "pitch": 0.6,
+                "volume": 0.6
+            },
+            {
+                "name": "minecraft:item/brush/brushing_sand4",
+                "pitch": 0.6,
+                "volume": 0.6
+            }
+        ],
+        "subtitle": "subtitles.item.brush.brushing.sand"
+    },
+    "item.brush.brushing.sand.complete": {
+        "sounds": [
+            "minecraft:item/brush/brush_sand_complete1",
+            "minecraft:item/brush/brush_sand_complete2",
+            "minecraft:item/brush/brush_sand_complete3",
+            "minecraft:item/brush/brush_sand_complete4"
+        ],
+        "subtitle": "subtitles.item.brush.brushing.sand.complete"
+    },
+    "block.suspicious_gravel.break": {
+        "sounds": [
+            "minecraft:block/suspicious_gravel/break1",
+            "minecraft:block/suspicious_gravel/break2",
+            "minecraft:block/suspicious_gravel/break3",
+            "minecraft:block/suspicious_gravel/break4",
+            "minecraft:block/suspicious_gravel/break5",
+            "minecraft:block/suspicious_gravel/break6"
+        ],
+        "subtitle": "subtitles.block.generic.break"
+    },
+    "block.suspicious_gravel.fall": {
+        "sounds": [
+            "minecraft:block/suspicious_gravel/step1",
+            "minecraft:block/suspicious_gravel/step2",
+            "minecraft:block/suspicious_gravel/step3",
+            "minecraft:block/suspicious_gravel/step4"
+        ]
+    },
+    "block.suspicious_gravel.hit": {
+        "sounds": [
+            {
+                "name": "minecraft:block/suspicious_gravel/step1",
+                "volume": 0.8
+            },
+            {
+                "name": "minecraft:block/suspicious_gravel/step2",
+                "volume": 0.8
+            },
+            {
+                "name": "minecraft:block/suspicious_gravel/step3",
+                "volume": 0.8
+            },
+            {
+                "name": "minecraft:block/suspicious_gravel/step4",
+                "volume": 0.8
+            }
+        ],
+        "subtitle": "subtitles.block.generic.hit"
+    },
+    "block.suspicious_gravel.place": {
+        "sounds": [
+            "minecraft:block/suspicious_gravel/place1",
+            "minecraft:block/suspicious_gravel/place2",
+            "minecraft:block/suspicious_gravel/place3",
+            "minecraft:block/suspicious_gravel/place4"
+        ],
+        "subtitle": "subtitles.block.generic.place"
+    },
+    "block.suspicious_gravel.step": {
+        "sounds": [
+            "minecraft:block/suspicious_gravel/step1",
+            "minecraft:block/suspicious_gravel/step2",
+            "minecraft:block/suspicious_gravel/step3",
+            "minecraft:block/suspicious_gravel/step4"
+        ],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "block.suspicious_sand.break": {
+        "sounds": [
+            "minecraft:block/suspicious_sand/break1",
+            "minecraft:block/suspicious_sand/break2",
+            "minecraft:block/suspicious_sand/break3",
+            "minecraft:block/suspicious_sand/break4",
+            "minecraft:block/suspicious_sand/break5",
+            "minecraft:block/suspicious_sand/break6"
+        ],
+        "subtitle": "subtitles.block.generic.break"
+    },
+    "block.suspicious_sand.fall": {
+        "sounds": [
+            "minecraft:block/suspicious_sand/step1",
+            "minecraft:block/suspicious_sand/step2",
+            "minecraft:block/suspicious_sand/step3",
+            "minecraft:block/suspicious_sand/step4",
+            "minecraft:block/suspicious_sand/step5"
+        ]
+    },
+    "block.suspicious_sand.hit": {
+        "sounds": [
+            "minecraft:block/suspicious_sand/step1",
+            "minecraft:block/suspicious_sand/step2",
+            "minecraft:block/suspicious_sand/step3",
+            "minecraft:block/suspicious_sand/step4",
+            "minecraft:block/suspicious_sand/step5"
+        ],
+        "subtitle": "subtitles.block.generic.hit"
+    },
+    "block.suspicious_sand.place": {
+        "sounds": [
+            "minecraft:block/suspicious_sand/place1",
+            "minecraft:block/suspicious_sand/place2",
+            "minecraft:block/suspicious_sand/place3",
+            "minecraft:block/suspicious_sand/place4",
+            "minecraft:block/suspicious_sand/place5"
+        ],
+        "subtitle": "subtitles.block.generic.place"
+    },
+    "block.suspicious_sand.step": {
+        "sounds": [
+            "minecraft:block/suspicious_sand/step1",
+            "minecraft:block/suspicious_sand/step2",
+            "minecraft:block/suspicious_sand/step3",
+            "minecraft:block/suspicious_sand/step4",
+            "minecraft:block/suspicious_sand/step5"
+        ],
+        "subtitle": "subtitles.block.generic.footsteps"
+    },
+    "block.decorated_pot.break": {
+        "sounds": [
+            "minecraft:block/decorated_pot/break1",
+            "minecraft:block/decorated_pot/break2",
+            "minecraft:block/decorated_pot/break3",
+            "minecraft:block/decorated_pot/break4"
+        ],
+        "subtitle": "subtitles.block.generic.break"
+    },
+    "block.decorated_pot.fall": {
+        "sounds": [
+            "minecraft:block/decorated_pot/step1",
+            "minecraft:block/decorated_pot/step2",
+            "minecraft:block/decorated_pot/step3",
+            "minecraft:block/decorated_pot/step4",
+            "minecraft:block/decorated_pot/step5"
+        ]
+    },
+    "block.decorated_pot.hit": {
+        "sounds": [
+            "minecraft:block/decorated_pot/step1",
+            "minecraft:block/decorated_pot/step2",
+            "minecraft:block/decorated_pot/step3",
+            "minecraft:block/decorated_pot/step4",
+            "minecraft:block/decorated_pot/step5"
+        ],
+        "subtitle": "subtitles.block.generic.hit"
+    },
+    "block.decorated_pot.place": {
+        "sounds": [
+            "minecraft:block/decorated_pot/break1",
+            "minecraft:block/decorated_pot/break2",
+            "minecraft:block/decorated_pot/break3",
+            "minecraft:block/decorated_pot/break4"
+        ],
+        "subtitle": "subtitles.block.generic.place"
+    },
+    "block.decorated_pot.shatter": {
+        "sounds": [
+            "minecraft:block/decorated_pot/shatter1",
+            "minecraft:block/decorated_pot/shatter2",
+            "minecraft:block/decorated_pot/shatter3",
+            "minecraft:block/decorated_pot/shatter4",
+            "minecraft:block/decorated_pot/shatter5",
+            "minecraft:block/decorated_pot/shatter6"
+        ],
+        "subtitle": "subtitles.block.decorated_pot.shatter"
+    },
+    "music_disc.relic": {
+        "sounds": [
+            {
+                "name": "minecraft:records/relic",
+                "stream": true
+            }
+        ]
+    }
+}
