@@ -18,10 +18,6 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:sniffer_egg"
-        },
-        {
-          "type": "minecraft:item",
           "name": "minecraft:iron_axe"
         },
         {
