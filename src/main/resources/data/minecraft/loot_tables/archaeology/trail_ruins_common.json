@@ -104,14 +104,6 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:spruce_hanging_sign"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:oak_hanging_sign"
-        },
-        {
-          "type": "minecraft:item",
           "name": "minecraft:gold_nugget"
         },
         {
