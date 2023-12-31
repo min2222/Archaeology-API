@@ -10,5 +10,5 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 public interface TemplateStructurePieceAccessor 
 {
 	@Accessor("placeSettings")
-	public void setPlaceSettings(StructurePlaceSettings settings);
+	public void setPlaceSettings(StructurePlaceSettings setting);
 }

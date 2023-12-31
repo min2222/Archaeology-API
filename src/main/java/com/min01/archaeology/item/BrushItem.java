@@ -71,25 +71,27 @@ public class BrushItem extends Item {
 	   consumer.accept(new IClientItemExtensions() {
 		   @Override
 		   public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
-			   int i = arm == HumanoidArm.RIGHT ? 1 : -1;
-			   poseStack.translate((float)i * 0.56F, -0.52F + equipProcess * -0.6F, -0.72F);
-			   
-			   float f = (float)(player.getUseItemRemainingTicks() % 10);
-			   float f1 = f - partialTick + 1.0F;
-			   float f2 = 1.0F - f1 / 10.0F;
-			   float f7 = -15.0F + 75.0F * Mth.cos(f2 * 2.0F * (float)Math.PI);
-			   if (arm != HumanoidArm.RIGHT) {
-				   poseStack.translate(0.1D, 0.83D, 0.35D);
-				   poseStack.mulPose(Vector3f.XP.rotationDegrees(-80.0F));
-				   poseStack.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
-				   poseStack.mulPose(Vector3f.XP.rotationDegrees(f7));
-				   poseStack.translate(-0.3D, 0.22D, 0.35D);
-			   } else {
-				   poseStack.translate(-0.25D, 0.22D, 0.35D);
-				   poseStack.mulPose(Vector3f.XP.rotationDegrees(-80.0F));
-				   poseStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
-				   poseStack.mulPose(Vector3f.ZP.rotationDegrees(0.0F));
-				   poseStack.mulPose(Vector3f.XP.rotationDegrees(f7));
+			   if (player.isUsingItem() && player.getUseItemRemainingTicks() > 0) {
+				   int i = arm == HumanoidArm.RIGHT ? 1 : -1;
+				   poseStack.translate((float)i * 0.56F, -0.52F + equipProcess * -0.6F, -0.72F);
+				   
+				   float f = (float)(player.getUseItemRemainingTicks() % 10);
+				   float f1 = f - partialTick + 1.0F;
+				   float f2 = 1.0F - f1 / 10.0F;
+				   float f7 = -15.0F + 75.0F * Mth.cos(f2 * 2.0F * (float)Math.PI);
+				   if (arm != HumanoidArm.RIGHT) {
+					   poseStack.translate(0.1D, 0.83D, 0.35D);
+					   poseStack.mulPose(Vector3f.XP.rotationDegrees(-80.0F));
+					   poseStack.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
+					   poseStack.mulPose(Vector3f.XP.rotationDegrees(f7));
+					   poseStack.translate(-0.3D, 0.22D, 0.35D);
+				   } else {
+					   poseStack.translate(-0.25D, 0.22D, 0.35D);
+					   poseStack.mulPose(Vector3f.XP.rotationDegrees(-80.0F));
+					   poseStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+					   poseStack.mulPose(Vector3f.ZP.rotationDegrees(0.0F));
+					   poseStack.mulPose(Vector3f.XP.rotationDegrees(f7));
+				   }
 			   }
 			   return false;
 		   }

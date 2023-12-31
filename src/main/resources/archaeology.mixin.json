@@ -7,8 +7,8 @@
   	"MixinDesertPyramidPiece",
   	"MixinStructure",
   	"MixinDesertWellFeature",
+  	"MixinOceanRuinPiece",
   	"MixinTemplateStructurePiece",
-  	"OceanRuinPieceAccessor",
   	"TemplateStructurePieceAccessor"
   ],
   "client": [
