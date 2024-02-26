@@ -1,9 +1,6 @@
 package com.min01.archaeology.block;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.min01.archaeology.blockentity.BrushableBlockEntity;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -14,11 +11,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Fallable;
-import net.minecraft.world.level.block.FallingBlock;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,6 +20,8 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class BrushableBlock extends BaseEntityBlock implements Fallable {
    public static final IntegerProperty DUSTED = IntegerProperty.create("dusted", 0, 3);
@@ -35,80 +30,78 @@ public class BrushableBlock extends BaseEntityBlock implements Fallable {
    private final SoundEvent brushSound;
    private final SoundEvent brushCompletedSound;
 
-   public BrushableBlock(Block p_277629_, BlockBehaviour.Properties p_277373_, SoundEvent p_278060_, SoundEvent p_277352_) {
-      super(p_277373_);
-      this.turnsInto = p_277629_;
-      this.brushSound = p_278060_;
-      this.brushCompletedSound = p_277352_;
-      this.registerDefaultState(this.stateDefinition.any().setValue(DUSTED, Integer.valueOf(0)));
+   public BrushableBlock(final Block turnsInto, final BlockBehaviour.Properties properties, final SoundEvent brushSound, final SoundEvent brushCompletedSound) {
+      super(properties);
+      this.turnsInto = turnsInto;
+      this.brushSound = brushSound;
+      this.brushCompletedSound = brushCompletedSound;
+
+      registerDefaultState(stateDefinition.any().setValue(DUSTED, 0));
    }
 
-   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_277623_) {
-      p_277623_.add(DUSTED);
+   protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
+      builder.add(DUSTED);
    }
    
    @Override
-   public PushReaction getPistonPushReaction(BlockState p_60584_) {
+   public @NotNull PushReaction getPistonPushReaction(@NotNull final BlockState state) {
 	   return PushReaction.DESTROY;
    }
 
-   public RenderShape getRenderShape(BlockState p_277553_) {
+   public @NotNull RenderShape getRenderShape(@NotNull final BlockState state) {
       return RenderShape.MODEL;
    }
 
-   public void onPlace(BlockState p_277817_, Level p_277984_, BlockPos p_277869_, BlockState p_277926_, boolean p_277736_) {
-      p_277984_.scheduleTick(p_277869_, this, 2);
+   public void onPlace(@NotNull final BlockState state, final Level level, @NotNull final BlockPos position, @NotNull final BlockState oldState, boolean isMoving) {
+      level.scheduleTick(position, this, 2);
    }
 
-   public BlockState updateShape(BlockState p_277801_, Direction p_277455_, BlockState p_277832_, LevelAccessor p_277473_, BlockPos p_278111_, BlockPos p_277904_) {
-      p_277473_.scheduleTick(p_278111_, this, 2);
-      return super.updateShape(p_277801_, p_277455_, p_277832_, p_277473_, p_278111_, p_277904_);
+   public @NotNull BlockState updateShape(@NotNull final BlockState state, @NotNull final Direction direction, @NotNull final BlockState neighborState, final LevelAccessor level, @NotNull final BlockPos currentPosition, @NotNull final BlockPos neighborPosition) {
+      level.scheduleTick(currentPosition, this, 2);
+      return super.updateShape(state, direction, neighborState, level, currentPosition, neighborPosition);
    }
 
-   public void tick(BlockState p_277544_, ServerLevel p_277779_, BlockPos p_278019_, RandomSource p_277471_) {
-      BlockEntity blockentity = p_277779_.getBlockEntity(p_278019_);
-      if (blockentity instanceof BrushableBlockEntity brushableblockentity) {
+   public void tick(@NotNull final BlockState state, final ServerLevel serverLevel, @NotNull final BlockPos position, @NotNull final RandomSource random) {
+      if (serverLevel.getBlockEntity(position) instanceof BrushableBlockEntity brushableblockentity) {
          brushableblockentity.checkReset();
       }
 
-      if (FallingBlock.isFree(p_277779_.getBlockState(p_278019_.below())) && p_278019_.getY() >= p_277779_.getMinBuildHeight()) {
-         FallingBlockEntity fallingblockentity = FallingBlockEntity.fall(p_277779_, p_278019_, p_277544_);
+      if (FallingBlock.isFree(serverLevel.getBlockState(position.below())) && position.getY() >= serverLevel.getMinBuildHeight()) {
+         FallingBlockEntity fallingblockentity = FallingBlockEntity.fall(serverLevel, position, state);
          fallingblockentity.dropItem = false;
       }
    }
 
-   public void onBrokenAfterFall(Level p_278097_, BlockPos p_277734_, FallingBlockEntity p_277539_) {
-      Vec3 vec3 = p_277539_.getBoundingBox().getCenter();
-      p_278097_.levelEvent(2001, new BlockPos(vec3), Block.getId(p_277539_.getBlockState()));
-      p_278097_.gameEvent(p_277539_, GameEvent.BLOCK_DESTROY, vec3);
+   public void onBrokenAfterFall(final Level level, @NotNull final BlockPos position, final FallingBlockEntity fallingBlock) {
+      Vec3 center = fallingBlock.getBoundingBox().getCenter();
+      level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, new BlockPos(center), Block.getId(fallingBlock.getBlockState()));
+      level.gameEvent(fallingBlock, GameEvent.BLOCK_DESTROY, center);
    }
 
-   public void animateTick(BlockState p_277390_, Level p_277525_, BlockPos p_278107_, RandomSource p_277574_) {
-      if (p_277574_.nextInt(16) == 0) {
-         BlockPos blockpos = p_278107_.below();
-         if (FallingBlock.isFree(p_277525_.getBlockState(blockpos))) {
-            double d0 = (double)p_278107_.getX() + p_277574_.nextDouble();
-            double d1 = (double)p_278107_.getY() - 0.05D;
-            double d2 = (double)p_278107_.getZ() + p_277574_.nextDouble();
-            p_277525_.addParticle(new BlockParticleOption(ParticleTypes.FALLING_DUST, p_277390_), d0, d1, d2, 0.0D, 0.0D, 0.0D);
+   public void animateTick(@NotNull final BlockState state, @NotNull final Level level, @NotNull final BlockPos position, final RandomSource random) {
+      if (random.nextInt(16) == 0) {
+         if (FallingBlock.isFree(level.getBlockState(position.below()))) {
+            double x = (double) position.getX() + random.nextDouble();
+            double y = (double) position.getY() - 0.05D;
+            double z = (double) position.getZ() + random.nextDouble();
+            level.addParticle(new BlockParticleOption(ParticleTypes.FALLING_DUST, state), x, y, z, 0.0D, 0.0D, 0.0D);
          }
       }
-
    }
 
-   public @Nullable BlockEntity newBlockEntity(BlockPos p_277683_, BlockState p_277381_) {
-      return new BrushableBlockEntity(p_277683_, p_277381_);
+   public @Nullable BlockEntity newBlockEntity(@NotNull final BlockPos position, @NotNull final BlockState state) {
+      return new BrushableBlockEntity(position, state);
    }
 
    public Block getTurnsInto() {
-      return this.turnsInto;
+      return turnsInto;
    }
 
    public SoundEvent getBrushSound() {
-      return this.brushSound;
+      return brushSound;
    }
 
    public SoundEvent getBrushCompletedSound() {
-      return this.brushCompletedSound;
+      return brushCompletedSound;
    }
 }

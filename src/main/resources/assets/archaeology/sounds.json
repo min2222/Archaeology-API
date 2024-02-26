@@ -88,7 +88,8 @@
             "minecraft:item/brush/brush_sand_complete1",
             "minecraft:item/brush/brush_sand_complete2",
             "minecraft:item/brush/brush_sand_complete3",
-            "minecraft:item/brush/brush_sand_complete4"
+            "minecraft:item/brush/brush_sand_complete4",
+            "minecraft:item/brush/brush_sand_complete5"
         ],
         "subtitle": "subtitles.item.brush.brushing.sand.complete"
     },
@@ -228,6 +229,52 @@
         ],
         "subtitle": "subtitles.block.generic.hit"
     },
+    "block.decorated_pot.insert": {
+        "sounds": [
+            {
+                "name": "minecraft:block/decorated_pot/insert1",
+                "volume": 0.9
+            },
+            {
+                "name": "minecraft:block/decorated_pot/insert2",
+                "volume": 0.9
+            },
+            {
+                "name": "minecraft:block/decorated_pot/insert3",
+                "volume": 0.9
+            },
+            {
+                "name": "minecraft:block/decorated_pot/insert4",
+                "volume": 0.9
+            }
+        ],
+        "subtitle": "subtitles.block.decorated_pot.insert"
+    },
+    "block.decorated_pot.insert_fail": {
+        "sounds": [
+            {
+                "name": "minecraft:block/decorated_pot/insert_fail1",
+                "volume": 0.9
+            },
+            {
+                "name": "minecraft:block/decorated_pot/insert_fail2",
+                "volume": 0.9
+            },
+            {
+                "name": "minecraft:block/decorated_pot/insert_fail3",
+                "volume": 0.9
+            },
+            {
+                "name": "minecraft:block/decorated_pot/insert_fail4",
+                "volume": 0.9
+            },
+            {
+                "name": "minecraft:block/decorated_pot/insert_fail5",
+                "volume": 0.9
+            }
+        ],
+        "subtitle": "subtitles.block.decorated_pot.insert_fail"
+    },
     "block.decorated_pot.place": {
         "sounds": [
             "minecraft:block/decorated_pot/break1",
@@ -243,8 +290,7 @@
             "minecraft:block/decorated_pot/shatter2",
             "minecraft:block/decorated_pot/shatter3",
             "minecraft:block/decorated_pot/shatter4",
-            "minecraft:block/decorated_pot/shatter5",
-            "minecraft:block/decorated_pot/shatter6"
+            "minecraft:block/decorated_pot/shatter5"
         ],
         "subtitle": "subtitles.block.decorated_pot.shatter"
     },

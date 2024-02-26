@@ -1,8 +1,9 @@
 package com.min01.archaeology.recipe;
 
+import com.min01.archaeology.block.DecoratedPotBlock;
 import com.min01.archaeology.blockentity.DecoratedPotBlockEntity;
 import com.min01.archaeology.init.ArchaeologyBlockEntityType;
-import com.min01.archaeology.init.ArchaeologyItemTags;
+import com.min01.archaeology.init.ArchaelogyTags;
 import com.min01.archaeology.init.ArchaeologyItems;
 import com.min01.archaeology.init.ArchaeologyRecipeSerializer;
 
@@ -33,7 +34,7 @@ public class DecoratedPotRecipe extends CustomRecipe {
 				case 3:
 				case 5:
 				case 7:
-					if (!itemstack.is(ArchaeologyItemTags.DECORATED_POT_INGREDIENTS)) {
+					if (!itemstack.is(ArchaelogyTags.DECORATED_POT_INGREDIENTS)) {
 						return false;
 					}
 					break;
@@ -54,15 +55,8 @@ public class DecoratedPotRecipe extends CustomRecipe {
 	@Override
 	public ItemStack assemble(CraftingContainer p_272861) {
       DecoratedPotBlockEntity.Decorations decoratedpotblockentity$decorations = new DecoratedPotBlockEntity.Decorations(p_272861.getItem(1).getItem(), p_272861.getItem(3).getItem(), p_272861.getItem(5).getItem(), p_272861.getItem(7).getItem());
-      return createDecoratedPotItem(decoratedpotblockentity$decorations);
+      return DecoratedPotBlockEntity.createDecoratedPotItem(decoratedpotblockentity$decorations);
    }
-
-	public static ItemStack createDecoratedPotItem(DecoratedPotBlockEntity.Decorations p_285413_) {
-		ItemStack itemstack = ArchaeologyItems.DECORATED_POT.get().getDefaultInstance();
-		CompoundTag compoundtag = p_285413_.save(new CompoundTag());
-		BlockItem.setBlockEntityData(itemstack, ArchaeologyBlockEntityType.DECORATED_POT.get(), compoundtag);
-		return itemstack;
-	}
 
 	public boolean canCraftInDimensions(int p_273734_, int p_273516_) {
 		return p_273734_ == 3 && p_273516_ == 3;
