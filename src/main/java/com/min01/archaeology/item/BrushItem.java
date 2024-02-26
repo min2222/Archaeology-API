@@ -1,17 +1,11 @@
 package com.min01.archaeology.item;
 
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.min01.archaeology.block.BrushableBlock;
 import com.min01.archaeology.blockentity.BrushableBlockEntity;
 import com.min01.archaeology.init.ArchaeologyArmPose;
 import com.min01.archaeology.init.ArchaeologySounds;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-
 import net.minecraft.client.model.HumanoidModel.ArmPose;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -36,195 +30,177 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class BrushItem extends Item {
-   public static final int ANIMATION_DURATION = 10;
-   private static final int USE_DURATION = 200;
-   private static final double MAX_BRUSH_DISTANCE = Math.sqrt(ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE) - 1.0D;
+    public static final int ANIMATION_DURATION = 10;
+    private static final int USE_DURATION = 200;
+    private static final double MAX_BRUSH_DISTANCE = Math.sqrt(ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE) - 1;
 
-   public BrushItem(Item.Properties p_272907_) {
-      super(p_272907_);
-   }
+    public BrushItem(final Item.Properties properties) {
+        super(properties);
+    }
 
-   public InteractionResult useOn(UseOnContext p_272607_) {
-      Player player = p_272607_.getPlayer();
-      if (player != null && this.calculateHitResult(player).getType() == HitResult.Type.BLOCK) {
-         player.startUsingItem(p_272607_.getHand());
-      }
+    public @NotNull InteractionResult useOn(final UseOnContext context) {
+        Player player = context.getPlayer();
 
-      return InteractionResult.CONSUME;
-   }
+        if (player != null && calculateHitResult(player).getType() == HitResult.Type.BLOCK) {
+            player.startUsingItem(context.getHand());
+        }
 
-   public UseAnim getUseAnimation(ItemStack p_273490_) {
-      return UseAnim.CUSTOM; //UseAnim.BRUSH;
-   }
-   
-   @Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-	   consumer.accept(new IClientItemExtensions() {
-		   @Override
-		   public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
-			   if (player.isUsingItem() && player.getUseItemRemainingTicks() > 0) {
-				   int i = arm == HumanoidArm.RIGHT ? 1 : -1;
-				   poseStack.translate((float)i * 0.56F, -0.52F + equipProcess * -0.6F, -0.72F);
-				   
-				   float f = (float)(player.getUseItemRemainingTicks() % 10);
-				   float f1 = f - partialTick + 1.0F;
-				   float f2 = 1.0F - f1 / 10.0F;
-				   float f7 = -15.0F + 75.0F * Mth.cos(f2 * 2.0F * (float)Math.PI);
-				   if (arm != HumanoidArm.RIGHT) {
-					   poseStack.translate(0.1D, 0.83D, 0.35D);
-					   poseStack.mulPose(Vector3f.XP.rotationDegrees(-80.0F));
-					   poseStack.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
-					   poseStack.mulPose(Vector3f.XP.rotationDegrees(f7));
-					   poseStack.translate(-0.3D, 0.22D, 0.35D);
-				   } else {
-					   poseStack.translate(-0.25D, 0.22D, 0.35D);
-					   poseStack.mulPose(Vector3f.XP.rotationDegrees(-80.0F));
-					   poseStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
-					   poseStack.mulPose(Vector3f.ZP.rotationDegrees(0.0F));
-					   poseStack.mulPose(Vector3f.XP.rotationDegrees(f7));
-				   }
-			   }
-			   return false;
-		   }
-		   
-		   @Override
-		   public @Nullable ArmPose getArmPose(LivingEntity entityLiving, InteractionHand hand, ItemStack itemStack) {
-			   return ArchaeologyArmPose.BRUSH;
-		   }
-	   });
-   }
+        return InteractionResult.CONSUME;
+    }
 
-   public int getUseDuration(ItemStack p_272765_) {
-      return 200;
-   }
+    public @NotNull UseAnim getUseAnimation(final @NotNull ItemStack stack) {
+        return UseAnim.CUSTOM; // UseAnim.BRUSH;
+    }
 
-   public void onUseTick(Level p_273467_, LivingEntity p_273619_, ItemStack p_273316_, int p_273101_) {
-      if (p_273101_ >= 0 && p_273619_ instanceof Player player) {
-         HitResult hitresult = this.calculateHitResult(p_273619_);
-         if (hitresult instanceof BlockHitResult blockhitresult) {
-            if (hitresult.getType() == HitResult.Type.BLOCK) {
-               int i = this.getUseDuration(p_273316_) - p_273101_ + 1;
-               boolean flag = i % 10 == 5;
-               if (flag) {
-                  BlockPos blockpos = blockhitresult.getBlockPos();
-                  BlockState blockstate = p_273467_.getBlockState(blockpos);
-                  HumanoidArm humanoidarm = p_273619_.getUsedItemHand() == InteractionHand.MAIN_HAND ? player.getMainArm() : player.getMainArm().getOpposite();
-                  this.spawnDustParticles(p_273467_, blockhitresult, blockstate, p_273619_.getViewVector(0.0F), humanoidarm);
-                  Block $$18 = blockstate.getBlock();
-                  SoundEvent soundevent;
-                  if ($$18 instanceof BrushableBlock) {
-                     BrushableBlock brushableblock = (BrushableBlock) $$18;
-                     soundevent = brushableblock.getBrushSound();
-                  } else {
-                     soundevent = ArchaeologySounds.BRUSH_GENERIC.get();
-                  }
+    @Override
+    public void initializeClient(final Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
+            @Override
+            public boolean applyForgeHandTransform(final PoseStack pose, final LocalPlayer player, final HumanoidArm arm, final ItemStack stackInHand, float partialTick, float equipProcess, float swingProcess) {
+                if (player.isUsingItem() && player.getUseItemRemainingTicks() > 0) {
+                    int i = arm == HumanoidArm.RIGHT ? 1 : -1;
+                    pose.translate((float) i * 0.56F, -0.52F + equipProcess * -0.6F, -0.72F);
+                    float f = (float) (player.getUseItemRemainingTicks() % ANIMATION_DURATION);
+                    float f1 = f - partialTick + 1.0F;
+                    float f2 = 1.0F - f1 / 10.0F;
+                    float f7 = -15.0F + 75.0F * Mth.cos(f2 * 2.0F * (float) Math.PI);
 
-                  p_273467_.playSound(player, blockpos, soundevent, SoundSource.BLOCKS, 1, 1);
-                  if (!p_273467_.isClientSide()) {
-                     BlockEntity blockentity = p_273467_.getBlockEntity(blockpos);
-                     if (blockentity instanceof BrushableBlockEntity brushableblockentity) {
-                         boolean flag1 = brushableblockentity.brush(p_273467_.getGameTime(), player, blockhitresult.getDirection());
-                        if (flag1) {
-                           EquipmentSlot equipmentslot = p_273316_.equals(player.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
-                           p_273316_.hurtAndBreak(1, p_273619_, (p_279044_) -> {
-                              p_279044_.broadcastBreakEvent(equipmentslot);
-                           });
-                        }
-                     }
-                  }
-               }
+                    if (arm != HumanoidArm.RIGHT) {
+                        pose.translate(0.1D, 0.83D, 0.35D);
+                        pose.mulPose(Vector3f.XP.rotationDegrees(-80.0F));
+                        pose.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
+                        pose.mulPose(Vector3f.XP.rotationDegrees(f7));
+                        pose.translate(-0.3D, 0.22D, 0.35D);
+                    } else {
+                        pose.translate(-0.25D, 0.22D, 0.35D);
+                        pose.mulPose(Vector3f.XP.rotationDegrees(-80.0F));
+                        pose.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+                        pose.mulPose(Vector3f.ZP.rotationDegrees(0.0F));
+                        pose.mulPose(Vector3f.XP.rotationDegrees(f7));
+                    }
+                }
 
-               return;
+                return false;
             }
-         }
 
-         p_273619_.releaseUsingItem();
-      } else {
-         p_273619_.releaseUsingItem();
-      }
-   }
+            @Override
+            public @Nullable ArmPose getArmPose(final LivingEntity entity, final InteractionHand hand, final ItemStack stack) {
+                return ArchaeologyArmPose.BRUSH;
+            }
+        });
+    }
 
-   private HitResult calculateHitResult(LivingEntity p_281264_) {
-      return getHitResultOnViewVector(p_281264_, (p_281111_) -> {
-         return !p_281111_.isSpectator() && p_281111_.isPickable();
-      }, MAX_BRUSH_DISTANCE);
-   }
-   
-   public static HitResult getHitResultOnViewVector(Entity p_278281_, Predicate<Entity> p_278306_, double p_278293_) {
-	   Vec3 vec3 = p_278281_.getViewVector(0.0F).scale(p_278293_);
-	   Level level = p_278281_.level;
-	   Vec3 vec31 = p_278281_.getEyePosition();
-	   return getHitResult(vec31, p_278281_, p_278306_, vec3, level);
-   }
+    public int getUseDuration(@NotNull final ItemStack stack) {
+        return USE_DURATION;
+    }
 
-   private static HitResult getHitResult(Vec3 p_278237_, Entity p_278320_, Predicate<Entity> p_278257_, Vec3 p_278342_, Level p_278321_) {
-	   Vec3 vec3 = p_278237_.add(p_278342_);
-	   HitResult hitresult = p_278321_.clip(new ClipContext(p_278237_, vec3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, p_278320_));
-	   if (hitresult.getType() != HitResult.Type.MISS) {
-		   vec3 = hitresult.getLocation();
-	   }
+    public void onUseTick(final @NotNull Level level, final @NotNull LivingEntity entity, final @NotNull ItemStack stack, int remainingUseDuration) {
+        if (remainingUseDuration >= 0 && entity instanceof Player player) {
+            HitResult hitresult = this.calculateHitResult(entity);
+            if (hitresult instanceof BlockHitResult blockhitresult) {
+                if (hitresult.getType() == HitResult.Type.BLOCK) {
+                    int useDuration = getUseDuration(stack) - remainingUseDuration + 1;
 
-	   HitResult hitresult1 = ProjectileUtil.getEntityHitResult(p_278321_, p_278320_, p_278237_, vec3, p_278320_.getBoundingBox().expandTowards(p_278342_).inflate(1.0D), p_278257_);
-	   if (hitresult1 != null) {
-		   hitresult = hitresult1;
-	   }
+                    if (useDuration % ANIMATION_DURATION == 5) {
+                        BlockPos position = blockhitresult.getBlockPos();
+                        BlockState state = level.getBlockState(position);
+                        HumanoidArm humanoidarm = entity.getUsedItemHand() == InteractionHand.MAIN_HAND ? player.getMainArm() : player.getMainArm().getOpposite();
 
-	   return hitresult;
-   }
+                        spawnDustParticles(level, blockhitresult, state, entity.getViewVector(0), humanoidarm);
+                        SoundEvent soundevent = state.getBlock() instanceof BrushableBlock brushable ? brushable.getBrushSound() : ArchaeologySounds.BRUSH_GENERIC.get();
+                        level.playSound(player, position, soundevent, SoundSource.BLOCKS, 1, 1);
 
-   public void spawnDustParticles(Level p_278327_, BlockHitResult p_278272_, BlockState p_278235_, Vec3 p_278337_, HumanoidArm p_285071_) {
-      double d0 = 3.0D;
-      int i = p_285071_ == HumanoidArm.RIGHT ? 1 : -1;
-      int j = p_278327_.getRandom().nextInt(7, 12);
-      BlockParticleOption blockparticleoption = new BlockParticleOption(ParticleTypes.BLOCK, p_278235_);
-      Direction direction = p_278272_.getDirection();
-      BrushItem.DustParticlesDelta brushitem$dustparticlesdelta = BrushItem.DustParticlesDelta.fromDirection(p_278337_, direction);
-      Vec3 vec3 = p_278272_.getLocation();
+                        if (!level.isClientSide()) {
+                            if (level.getBlockEntity(position) instanceof BrushableBlockEntity brushableEntity) {
+                                if (brushableEntity.brush(level.getGameTime(), player, blockhitresult.getDirection())) {
+                                    EquipmentSlot equipmentslot = stack.equals(player.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
+                                    stack.hurtAndBreak(1, entity, breaker -> breaker.broadcastBreakEvent(equipmentslot));
+                                }
+                            }
+                        }
+                    }
 
-      for(int k = 0; k < j; ++k) {
-         p_278327_.addParticle(blockparticleoption, vec3.x - (double)(direction == Direction.WEST ? 1.0E-6F : 0.0F), vec3.y, vec3.z - (double)(direction == Direction.NORTH ? 1.0E-6F : 0.0F), brushitem$dustparticlesdelta.xd() * (double)i * 3.0D * p_278327_.getRandom().nextDouble(), 0.0D, brushitem$dustparticlesdelta.zd() * (double)i * 3.0D * p_278327_.getRandom().nextDouble());
-      }
+                    return;
+                }
+            }
 
-   }
+            entity.releaseUsingItem();
+        } else {
+            entity.releaseUsingItem();
+        }
+    }
 
-   static record DustParticlesDelta(double xd, double yd, double zd) {
-      private static final double ALONG_SIDE_DELTA = 1.0D;
-      private static final double OUT_FROM_SIDE_DELTA = 0.1D;
+    private HitResult calculateHitResult(final LivingEntity livingEntity) {
+        return getHitResultOnViewVector(livingEntity, entity -> !entity.isSpectator() && entity.isPickable(), MAX_BRUSH_DISTANCE);
+    }
 
-      public static BrushItem.DustParticlesDelta fromDirection(Vec3 p_273421_, Direction p_272987_) {
-         double d0 = 0.0D;
-         BrushItem.DustParticlesDelta brushitem$dustparticlesdelta;
-         switch (p_272987_) {
-            case DOWN:
-            case UP:
-               brushitem$dustparticlesdelta = new BrushItem.DustParticlesDelta(p_273421_.z(), 0.0D, -p_273421_.x());
-               break;
-            case NORTH:
-               brushitem$dustparticlesdelta = new BrushItem.DustParticlesDelta(1.0D, 0.0D, -0.1D);
-               break;
-            case SOUTH:
-               brushitem$dustparticlesdelta = new BrushItem.DustParticlesDelta(-1.0D, 0.0D, 0.1D);
-               break;
-            case WEST:
-               brushitem$dustparticlesdelta = new BrushItem.DustParticlesDelta(-0.1D, 0.0D, -1.0D);
-               break;
-            case EAST:
-               brushitem$dustparticlesdelta = new BrushItem.DustParticlesDelta(0.1D, 0.0D, 1.0D);
-               break;
-            default:
-               throw new IncompatibleClassChangeError();
-         }
+    public static HitResult getHitResultOnViewVector(final Entity entity, final Predicate<Entity> filter, double distance) {
+        Vec3 view = entity.getViewVector(0).scale(distance);
+        return getHitResult(entity.getEyePosition(), entity, filter, view, entity.level);
+    }
 
-         return brushitem$dustparticlesdelta;
-      }
-   }
+    private static HitResult getHitResult(final Vec3 from, final Entity entity, final Predicate<Entity> filter, final Vec3 view, final Level level) {
+        Vec3 to = from.add(view);
+        HitResult blockHitResult = level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+
+        if (blockHitResult.getType() != HitResult.Type.MISS) {
+            to = blockHitResult.getLocation();
+        }
+
+        HitResult entityHitResult = ProjectileUtil.getEntityHitResult(level, entity, from, to, entity.getBoundingBox().expandTowards(view).inflate(1), filter);
+
+        if (entityHitResult != null) {
+            blockHitResult = entityHitResult;
+        }
+
+        return blockHitResult;
+    }
+
+    public void spawnDustParticles(final Level level, final BlockHitResult hitResult, final BlockState state, final Vec3 vector, final HumanoidArm arm) {
+        double speedMultiplier = 3.0D;
+        double min = 0.000001;
+
+        int armType = arm == HumanoidArm.RIGHT ? 1 : -1;
+        int particleAmount = level.getRandom().nextInt(7, 12);
+        BlockParticleOption blockparticleoption = new BlockParticleOption(ParticleTypes.BLOCK, state);
+        Direction direction = hitResult.getDirection();
+        BrushItem.DustParticlesDelta particleDelta = BrushItem.DustParticlesDelta.fromDirection(vector, direction);
+        Vec3 location = hitResult.getLocation();
+
+        for (int i = 0; i < particleAmount; i++) {
+            double x = location.x - (direction == Direction.WEST ? min : 0);
+            double z = location.z - (direction == Direction.NORTH ? min : 0);
+            double xSpeed = particleDelta.xd() * (double) armType * speedMultiplier * level.getRandom().nextDouble();
+            double zSpeed = particleDelta.zd() * (double) armType * speedMultiplier * level.getRandom().nextDouble();
+            level.addParticle(blockparticleoption, x, location.y, z, xSpeed, 0, zSpeed);
+        }
+
+    }
+
+    record DustParticlesDelta(double xd, double yd, double zd) {
+        private static final double ALONG_SIDE_DELTA = 1.0D;
+        private static final double OUT_FROM_SIDE_DELTA = 0.1D;
+
+        public static BrushItem.DustParticlesDelta fromDirection(final Vec3 vector, final Direction direction) {
+            return switch (direction) {
+                case DOWN, UP -> new DustParticlesDelta(vector.z(), 0, -vector.x());
+                case NORTH -> new DustParticlesDelta(ALONG_SIDE_DELTA, 0, -OUT_FROM_SIDE_DELTA);
+                case SOUTH -> new DustParticlesDelta(-ALONG_SIDE_DELTA, 0, OUT_FROM_SIDE_DELTA);
+                case WEST -> new DustParticlesDelta(-OUT_FROM_SIDE_DELTA, 0, -ALONG_SIDE_DELTA);
+                case EAST -> new DustParticlesDelta(OUT_FROM_SIDE_DELTA, 0, ALONG_SIDE_DELTA);
+            };
+        }
+    }
 }

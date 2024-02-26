@@ -65,8 +65,9 @@ public class BrushableBlockEntity extends BlockEntity {
          coolDownEndsAtTick = gameTime + BRUSH_COOLDOWN_TICKS;
          unpackLootTable(player);
          int oldState = getCompletionState();
+         brushCount++;
 
-         if (++brushCount >= REQUIRED_BRUSHES_TO_BREAK) {
+         if (brushCount >= REQUIRED_BRUSHES_TO_BREAK) {
             brushingCompleted(player);
             return true;
          } else {
