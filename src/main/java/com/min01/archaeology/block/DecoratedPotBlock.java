@@ -193,8 +193,8 @@ public class DecoratedPotBlock extends BaseEntityBlock implements SimpleWaterlog
     }
 
     public @NotNull List<ItemStack> getDrops(@NotNull final BlockState state, final LootContext.Builder builder) {
-        if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof DecoratedPotBlockEntity pot) {
-            builder.withDynamicDrop(SHERDS_DYNAMIC_DROP_ID, (context, stack) -> pot.getDecorations().sorted().map(Item::getDefaultInstance).forEach(stack));
+        if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof DecoratedPotBlockEntity potEntity) {
+            builder.withDynamicDrop(SHERDS_DYNAMIC_DROP_ID, (context, stack) -> potEntity.getDecorations().sorted().map(Item::getDefaultInstance).forEach(stack));
         }
 
         return super.getDrops(state, builder);
