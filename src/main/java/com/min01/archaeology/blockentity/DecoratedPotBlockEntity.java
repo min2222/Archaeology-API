@@ -1,9 +1,16 @@
 package com.min01.archaeology.blockentity;
 
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.min01.archaeology.container.ContainerSingleItem;
 import com.min01.archaeology.container.RandomizableContainer;
 import com.min01.archaeology.init.ArchaeologyBlockEntityType;
 import com.min01.archaeology.init.ArchaeologyItems;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,11 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.checkerframework.checker.units.qual.C;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.stream.Stream;
 
 public class DecoratedPotBlockEntity extends BlockEntity implements RandomizableContainer, ContainerSingleItem.BlockContainerSingleItem {
    public static final String TAG_SHERDS = "sherds";
@@ -163,7 +165,6 @@ public class DecoratedPotBlockEntity extends BlockEntity implements Randomizable
    public record Decorations(Item back, Item left, Item right, Item front) {
       public static final DecoratedPotBlockEntity.Decorations EMPTY = new DecoratedPotBlockEntity.Decorations(Items.BRICK, Items.BRICK, Items.BRICK, Items.BRICK);
 
-      @SuppressWarnings("ConstantConditions")
       public CompoundTag save(final CompoundTag tag) {
          ListTag listTag = new ListTag();
          sorted().forEach(item -> listTag.add(StringTag.valueOf(ForgeRegistries.ITEMS.getKey(item).toString())));

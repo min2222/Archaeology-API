@@ -1,9 +1,17 @@
 package com.min01.archaeology.blockentity;
 
+import java.util.Objects;
+
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+
 import com.min01.archaeology.block.BrushableBlock;
 import com.min01.archaeology.init.ArchaeologyBlockEntityType;
 import com.min01.archaeology.misc.CustomLevelEvent;
 import com.mojang.logging.LogUtils;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -27,11 +35,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-
-import javax.annotation.Nullable;
-import java.util.Objects;
 
 public class BrushableBlockEntity extends BlockEntity {
    private static final Logger LOGGER = LogUtils.getLogger();

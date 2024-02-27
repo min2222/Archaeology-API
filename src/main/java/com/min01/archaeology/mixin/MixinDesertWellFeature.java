@@ -1,8 +1,17 @@
 package com.min01.archaeology.mixin;
 
+import java.util.List;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import com.min01.archaeology.init.ArchaeologyBlockEntityType;
 import com.min01.archaeology.init.ArchaeologyBlocks;
 import com.min01.archaeology.init.ArchaeologyLootTables;
+
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
@@ -10,13 +19,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.DesertWellFeature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.List;
 
 /** Place suspicious sand in desert well features */
 @Mixin(DesertWellFeature.class)

@@ -1,8 +1,17 @@
 package com.min01.archaeology.mixin;
 
+import java.util.List;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.min01.archaeology.init.ArchaeologyBlocks;
 import com.min01.archaeology.init.ArchaeologyLootTables;
 import com.min01.archaeology.structure.processor.CappedProcessor;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;

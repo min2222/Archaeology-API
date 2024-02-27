@@ -1,10 +1,11 @@
 package com.min01.archaeology.container;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.jetbrains.annotations.NotNull;
 
 public interface ContainerSingleItem extends Container {
 	ItemStack getTheItem();

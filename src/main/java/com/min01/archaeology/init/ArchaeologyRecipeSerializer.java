@@ -2,6 +2,7 @@ package com.min01.archaeology.init;
 
 import com.min01.archaeology.Archaeology;
 import com.min01.archaeology.recipe.DecoratedPotRecipe;
+
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraftforge.registries.DeferredRegister;
