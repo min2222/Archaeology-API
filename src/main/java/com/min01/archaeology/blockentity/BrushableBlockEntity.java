@@ -58,8 +58,8 @@ public class BrushableBlockEntity extends BlockEntity {
    }
 
    public boolean brush(long gameTime, final Player player, final Direction hitDirection) {
-      if (hitDirection == null) {
-         this.hitDirection = null;
+      if (this.hitDirection == null) {
+         this.hitDirection = hitDirection;
       }
 
       brushCountResetsAtTick = gameTime + BRUSH_RESET_TICKS;

@@ -8,11 +8,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.min01.archaeology.blockentity.BrushableBlockEntity;
 import com.min01.archaeology.init.ArchaeologyBlocks;
 import com.min01.archaeology.init.ArchaeologyLootTables;
 import com.min01.archaeology.structure.processor.CappedProcessor;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -37,6 +39,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.Optional;
 
 /** Set suspicious block processors for the vanilla ocean ruin structures */
 @Mixin(OceanRuinPiece.class)
@@ -47,11 +50,13 @@ public abstract class MixinOceanRuinPiece extends TemplateStructurePiece {
 
     @Unique
     private static StructureProcessor archaeology$archyRuleProcessor(final Block inputBlock, final Block outputBlock, final ResourceLocation lootTable) {
-        return new CappedProcessor(new RuleProcessor(List.of(new ProcessorRule(new BlockMatchTest(inputBlock), AlwaysTrueTest.INSTANCE, PosAlwaysTrueTest.INSTANCE, outputBlock.defaultBlockState()))), ConstantInt.of(5), lootTable);
+        CompoundTag lootTableTag = new CompoundTag();
+        lootTableTag.putString(BrushableBlockEntity.LOOT_TABLE_TAG, lootTable.toString());
+        return new CappedProcessor(new RuleProcessor(List.of(new ProcessorRule(new BlockMatchTest(inputBlock), AlwaysTrueTest.INSTANCE, PosAlwaysTrueTest.INSTANCE, outputBlock.defaultBlockState(), Optional.of(lootTableTag)))), ConstantInt.of(5), lootTable);
     }
 
     @Inject(method = "postProcess", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructurePlaceSettings;clearProcessors()Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructurePlaceSettings;", shift = At.Shift.AFTER))
-    private void addProccessors(WorldGenLevel pLevel, StructureManager pStructureManager, ChunkGenerator pGenerator, RandomSource pRandom, BoundingBox pBox, ChunkPos pChunkPos, BlockPos pPos, CallbackInfo ci) {
+    private void addProccessors(final WorldGenLevel level, final StructureManager manager, final ChunkGenerator generator, final RandomSource random, final BoundingBox boundingBox, final ChunkPos chunkPosition, final BlockPos position, final CallbackInfo callback) {
         StructureProcessor suspiciousProcessor = biomeType == OceanRuinStructure.Type.COLD ? archaeology$archyRuleProcessor(Blocks.GRAVEL, ArchaeologyBlocks.SUSPICIOUS_GRAVEL.get(), ArchaeologyLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY) : archaeology$archyRuleProcessor(Blocks.SAND, ArchaeologyBlocks.SUSPICIOUS_SAND.get(), ArchaeologyLootTables.OCEAN_RUIN_WARM_ARCHAEOLOGY);
         placeSettings.addProcessor(suspiciousProcessor);
     }
