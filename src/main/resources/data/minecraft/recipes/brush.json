@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X",
-    "#",
-    "I"
-  ],
+  "category": "equipment",
   "key": {
     "#": {
       "item": "minecraft:copper_ingot"
@@ -16,6 +12,11 @@
       "item": "minecraft:feather"
     }
   },
+  "pattern": [
+    "X",
+    "#",
+    "I"
+  ],
   "result": {
     "item": "minecraft:brush"
   }
