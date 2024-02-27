@@ -8,7 +8,8 @@
     "MixinDesertPyramidPiece",
     "MixinDesertWellFeature",
     "MixinOceanRuinPiece",
-    "MixinStructure"
+    "MixinStructure",
+    "StructureBlockInfoMixin"
   ],
   "client": [
     "client.LevelRendererMixin"
