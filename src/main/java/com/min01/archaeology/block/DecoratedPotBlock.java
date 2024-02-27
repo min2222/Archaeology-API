@@ -199,7 +199,7 @@ public class DecoratedPotBlock extends BaseEntityBlock implements SimpleWaterlog
             // FIXME (Workaround) :: The CRACKED will still be `false` even though it was set to `true` (does not happen for projectile breaks)
             List<ItemStack> drops = super.getDrops(state, builder);
 
-            if (!state.getValue(CRACKED) && builder.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof Player player && player.getMainHandItem().is(ArchaelogyTags.BREAKS_DECORATED_POTS)) {
+            if (!state.getValue(CRACKED) && builder.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof Player player && shouldDropShards(player)) {
                 boolean removed = drops.removeIf(stack -> stack.is(asItem()));
 
                 if (removed) {
@@ -214,15 +214,19 @@ public class DecoratedPotBlock extends BaseEntityBlock implements SimpleWaterlog
     }
 
     public void playerWillDestroy(@NotNull final Level level, @NotNull final BlockPos position, @NotNull final BlockState state, final Player player) {
-        ItemStack stack = player.getMainHandItem();
         BlockState newState = state;
 
-        if (stack.is(ArchaelogyTags.BREAKS_DECORATED_POTS) && stack.getEnchantmentLevel(Enchantments.SILK_TOUCH) <= 0) {
+        if (shouldDropShards(player)) {
             newState = state.setValue(CRACKED, Boolean.TRUE);
             level.setBlock(position, newState, Block.UPDATE_INVISIBLE);
         }
 
         super.playerWillDestroy(level, position, newState, player);
+    }
+
+    private boolean shouldDropShards(final Player player) {
+        ItemStack stack = player.getMainHandItem();
+        return stack.is(ArchaelogyTags.BREAKS_DECORATED_POTS) && stack.getEnchantmentLevel(Enchantments.SILK_TOUCH) <= 0;
     }
 
     public @NotNull FluidState getFluidState(final BlockState state) {
