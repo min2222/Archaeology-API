@@ -9,8 +9,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ArchaeologyBlockEntityType
-{
+public class ArchaeologyBlockEntityType {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Archaeology.MC_ID);
     
 	public static final RegistryObject<BlockEntityType<BrushableBlockEntity>> BRUSHABLE_BLOCK = BLOCK_ENTITIES.register("brushable_block", () -> BlockEntityType.Builder.of(BrushableBlockEntity::new, ArchaeologyBlocks.SUSPICIOUS_SAND.get(), ArchaeologyBlocks.SUSPICIOUS_GRAVEL.get()).build(null));

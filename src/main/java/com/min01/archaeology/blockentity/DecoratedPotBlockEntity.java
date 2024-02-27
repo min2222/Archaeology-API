@@ -1,18 +1,14 @@
 package com.min01.archaeology.blockentity;
 
-import java.util.stream.Stream;
-
-import javax.annotation.Nullable;
-
+import com.min01.archaeology.container.ContainerSingleItem;
+import com.min01.archaeology.container.RandomizableContainer;
 import com.min01.archaeology.init.ArchaeologyBlockEntityType;
-
+import com.min01.archaeology.init.ArchaeologyItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -22,30 +18,56 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.checkerframework.checker.units.qual.C;
+import org.jetbrains.annotations.NotNull;
 
-public class DecoratedPotBlockEntity extends BlockEntity {
+import javax.annotation.Nullable;
+import java.util.stream.Stream;
+
+public class DecoratedPotBlockEntity extends BlockEntity implements RandomizableContainer, ContainerSingleItem.BlockContainerSingleItem {
    public static final String TAG_SHERDS = "sherds";
-   private DecoratedPotBlockEntity.Decorations decorations = DecoratedPotBlockEntity.Decorations.EMPTY;
+   public static final String TAG_ITEM = "item";
+   public static final int EVENT_POT_WOBBLES = 1;
+   public long wobbleStartedAtTick;
+   public @Nullable DecoratedPotBlockEntity.WobbleStyle lastWobbleStyle;
+   private DecoratedPotBlockEntity.Decorations decorations;
+   private ItemStack stack = ItemStack.EMPTY;
+   protected @Nullable ResourceLocation lootTable;
+   protected long lootTableSeed;
 
-   public DecoratedPotBlockEntity(BlockPos p_273660_, BlockState p_272831_) {
-      super(ArchaeologyBlockEntityType.DECORATED_POT.get(), p_273660_, p_272831_);
+   public DecoratedPotBlockEntity(final BlockPos position, final BlockState state) {
+      super(ArchaeologyBlockEntityType.DECORATED_POT.get(), position, state);
+      decorations = Decorations.EMPTY;
    }
 
-   protected void saveAdditional(CompoundTag p_272957_) {
-      super.saveAdditional(p_272957_);
-      this.decorations.save(p_272957_);
+   protected void saveAdditional(final @NotNull CompoundTag tag) {
+      super.saveAdditional(tag);
+      decorations.save(tag);
+
+      if (!trySaveLootTable(tag) && !stack.isEmpty()) {
+         tag.put(TAG_ITEM, stack.save(new CompoundTag()));
+      }
    }
 
-   public void load(CompoundTag p_272924_) {
-      super.load(p_272924_);
-      this.decorations = DecoratedPotBlockEntity.Decorations.load(p_272924_);
+   public void load(final @NotNull CompoundTag tag) {
+      super.load(tag);
+      decorations = DecoratedPotBlockEntity.Decorations.load(tag);
+
+      if (!tryLoadLootTable(tag)) {
+         if (tag.contains(TAG_ITEM, ListTag.TAG_COMPOUND)) {
+            stack = ItemStack.of(tag.getCompound(TAG_ITEM));
+         } else {
+            stack = ItemStack.EMPTY;
+         }
+      }
    }
 
    public ClientboundBlockEntityDataPacket getUpdatePacket() {
       return ClientboundBlockEntityDataPacket.create(this);
    }
 
-   public CompoundTag getUpdateTag() {
+   public @NotNull CompoundTag getUpdateTag() {
       return this.saveWithoutMetadata();
    }
 
@@ -57,42 +79,128 @@ public class DecoratedPotBlockEntity extends BlockEntity {
       return this.decorations;
    }
 
-   public void setFromItem(ItemStack p_273109_) {
-      this.decorations = DecoratedPotBlockEntity.Decorations.load(BlockItem.getBlockEntityData(p_273109_));
+   public void setFromItem(final ItemStack stack) {
+      this.decorations = DecoratedPotBlockEntity.Decorations.load(BlockItem.getBlockEntityData(stack));
    }
 
-   public static record Decorations(Item back, Item left, Item right, Item front) {
+   public ItemStack getPotAsItem() {
+      return createDecoratedPotItem(decorations);
+   }
+
+   public static ItemStack createDecoratedPotItem(final DecoratedPotBlockEntity.Decorations decorations) {
+      ItemStack stack = ArchaeologyItems.DECORATED_POT.get().getDefaultInstance();
+      CompoundTag tag = decorations.save(new CompoundTag());
+      BlockItem.setBlockEntityData(stack, ArchaeologyBlockEntityType.DECORATED_POT.get(), tag);
+      return stack;
+   }
+
+   @Override
+   public @Nullable ResourceLocation getLootTable() {
+      return lootTable;
+   }
+
+   @Override
+   public void setLootTable(final @Nullable ResourceLocation lootTable) {
+      this.lootTable = lootTable;
+   }
+
+   @Override
+   public long getLootTableSeed() {
+      return lootTableSeed;
+   }
+
+   @Override
+   public void setLootTableSeed(long lootTableSeed) {
+      this.lootTableSeed = lootTableSeed;
+   }
+
+   @Override
+   public ItemStack getTheItem() {
+      unpackLootTable(null);
+      return stack;
+   }
+
+   @Override
+   public ItemStack splitTheItem(int amount) {
+      unpackLootTable(null);
+      ItemStack stack = this.stack.split(amount);
+
+      if (this.stack.isEmpty()) {
+         this.stack = ItemStack.EMPTY;
+      }
+
+      return stack;
+   }
+
+   @Override
+   public void setTheItem(final ItemStack stack) {
+      unpackLootTable(null);
+      this.stack = stack;
+   }
+
+   @Override
+   public BlockEntity getContainerBlockEntity() {
+      return this;
+   }
+
+   public void wobble(final DecoratedPotBlockEntity.WobbleStyle wobbleStyle) {
+      if (level != null && !level.isClientSide()) {
+         level.blockEvent(getBlockPos(), getBlockState().getBlock(), EVENT_POT_WOBBLES, wobbleStyle.ordinal());
+      }
+   }
+
+   @Override
+   public boolean triggerEvent(int event, int duration) {
+      if (level != null && event == EVENT_POT_WOBBLES && duration >= 0 && duration < DecoratedPotBlockEntity.WobbleStyle.values().length) {
+         wobbleStartedAtTick = level.getGameTime();
+         lastWobbleStyle = DecoratedPotBlockEntity.WobbleStyle.values()[duration];
+         return true;
+      } else {
+         return super.triggerEvent(event, duration);
+      }
+   }
+
+   public record Decorations(Item back, Item left, Item right, Item front) {
       public static final DecoratedPotBlockEntity.Decorations EMPTY = new DecoratedPotBlockEntity.Decorations(Items.BRICK, Items.BRICK, Items.BRICK, Items.BRICK);
 
-      public CompoundTag save(CompoundTag p_285011_) {
-         ListTag listtag = new ListTag();
-         this.sorted().forEach((p_285298_) -> {
-            listtag.add(StringTag.valueOf(Registry.ITEM.getKey(p_285298_).toString()));
-         });
-         p_285011_.put("sherds", listtag);
-         return p_285011_;
+      @SuppressWarnings("ConstantConditions")
+      public CompoundTag save(final CompoundTag tag) {
+         ListTag listTag = new ListTag();
+         sorted().forEach(item -> listTag.add(StringTag.valueOf(ForgeRegistries.ITEMS.getKey(item).toString())));
+         tag.put(TAG_SHERDS, listTag);
+         return tag;
       }
 
       public Stream<Item> sorted() {
          return Stream.of(this.back, this.left, this.right, this.front);
       }
 
-      public static DecoratedPotBlockEntity.Decorations load(@Nullable CompoundTag p_284959_) {
-         if (p_284959_ != null && p_284959_.contains("sherds", 9)) {
-            ListTag listtag = p_284959_.getList("sherds", 8);
-            return new DecoratedPotBlockEntity.Decorations(itemFromTag(listtag, 0), itemFromTag(listtag, 1), itemFromTag(listtag, 2), itemFromTag(listtag, 3));
+      public static DecoratedPotBlockEntity.Decorations load(final @Nullable CompoundTag tag) {
+         if (tag != null && tag.contains(TAG_SHERDS, ListTag.TAG_LIST)) {
+            ListTag listTag = tag.getList(TAG_SHERDS, ListTag.TAG_STRING);
+            return new DecoratedPotBlockEntity.Decorations(itemFromTag(listTag, 0), itemFromTag(listTag, 1), itemFromTag(listTag, 2), itemFromTag(listTag, 3));
          } else {
             return EMPTY;
          }
       }
 
-      private static Item itemFromTag(ListTag p_285179_, int p_285060_) {
-         if (p_285060_ >= p_285179_.size()) {
+      private static Item itemFromTag(final ListTag listTag, int index) {
+         if (index >= listTag.size()) {
             return Items.BRICK;
          } else {
-            Tag tag = p_285179_.get(p_285060_);
-            return Registry.ITEM.get(new ResourceLocation(tag.getAsString()));
+            return ForgeRegistries.ITEMS.getValue(new ResourceLocation(listTag.get(index).getAsString()));
          }
+      }
+   }
+
+   public enum WobbleStyle {
+      POSITIVE(7),
+      NEGATIVE(10);
+
+      public final int duration;
+
+      WobbleStyle(int duration) {
+         this.duration = duration;
       }
    }
 }
