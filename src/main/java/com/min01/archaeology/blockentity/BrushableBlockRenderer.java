@@ -3,7 +3,6 @@ package com.min01.archaeology.blockentity;
 import com.min01.archaeology.block.BrushableBlock;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -13,65 +12,67 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
-@OnlyIn(Dist.CLIENT)
 public class BrushableBlockRenderer implements BlockEntityRenderer<BrushableBlockEntity> {
-   private final ItemRenderer itemRenderer;
+    private final ItemRenderer itemRenderer;
 
-   public BrushableBlockRenderer(BlockEntityRendererProvider.Context p_277899_) {
-      this.itemRenderer = p_277899_.getItemRenderer();
-   }
+    public BrushableBlockRenderer(final BlockEntityRendererProvider.Context context) {
+        this.itemRenderer = context.getItemRenderer();
+    }
 
-   public void render(BrushableBlockEntity p_277712_, float p_277981_, PoseStack p_277490_, MultiBufferSource p_278015_, int p_277463_, int p_277346_) {
-      if (p_277712_.getLevel() != null) {
-         int i = p_277712_.getBlockState().getValue(BrushableBlock.DUSTED);
-         if (i > 0) {
-            Direction direction = p_277712_.getHitDirection();
-            if (direction != null) {
-               ItemStack itemstack = p_277712_.getItem();
-               if (!itemstack.isEmpty()) {
-                  p_277490_.pushPose();
-                  p_277490_.translate(0.0F, 0.5F, 0.0F);
-                  float[] afloat = this.translations(direction, i);
-                  p_277490_.translate(afloat[0], afloat[1], afloat[2]);
-                  p_277490_.mulPose(Vector3f.YP.rotationDegrees(75.0F));
-                  boolean flag = direction == Direction.EAST || direction == Direction.WEST;
-                  p_277490_.mulPose(Vector3f.YP.rotationDegrees((float)((flag ? 90 : 0) + 11)));
-                  p_277490_.scale(0.5F, 0.5F, 0.5F);
-                  int j = LevelRenderer.getLightColor(p_277712_.getLevel(), p_277712_.getBlockState(), p_277712_.getBlockPos().relative(direction));
-                  this.itemRenderer.renderStatic(itemstack, ItemTransforms.TransformType.FIXED, j, OverlayTexture.NO_OVERLAY, p_277490_, p_278015_, 0);
-                  p_277490_.popPose();
-               }
+    public void render(final BrushableBlockEntity brushableBlock, float partialTick, final @NotNull PoseStack pose, final @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        if (brushableBlock.getLevel() != null) {
+            int dusted = brushableBlock.getBlockState().getValue(BrushableBlock.DUSTED);
+
+            if (dusted > 0) {
+                Direction direction = brushableBlock.getHitDirection();
+
+                if (direction != null) {
+                    ItemStack stack = brushableBlock.getItem();
+
+                    if (!stack.isEmpty()) {
+                        pose.pushPose();
+                        pose.translate(0.0F, 0.5F, 0.0F);
+                        float[] translations = translations(direction, dusted);
+                        pose.translate(translations[0], translations[1], translations[2]);
+                        pose.mulPose(Vector3f.YP.rotationDegrees(75.0F));
+                        boolean flag = direction == Direction.EAST || direction == Direction.WEST;
+                        pose.mulPose(Vector3f.YP.rotationDegrees((float) ((flag ? 90 : 0) + 11)));
+                        pose.scale(0.5F, 0.5F, 0.5F);
+                        int j = LevelRenderer.getLightColor(brushableBlock.getLevel(), brushableBlock.getBlockState(), brushableBlock.getBlockPos().relative(direction));
+                        itemRenderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, j, OverlayTexture.NO_OVERLAY, pose, buffer, 0);
+                        pose.popPose();
+                    }
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   private float[] translations(Direction p_278030_, int p_277997_) {
-      float[] afloat = new float[]{0.5F, 0.0F, 0.5F};
-      float f = (float)p_277997_ / 10.0F * 0.75F;
-      switch (p_278030_) {
-         case EAST:
-            afloat[0] = 0.73F + f;
-            break;
-         case WEST:
-            afloat[0] = 0.25F - f;
-            break;
-         case UP:
-            afloat[1] = 0.25F + f;
-            break;
-         case DOWN:
-            afloat[1] = -0.23F - f;
-            break;
-         case NORTH:
-            afloat[2] = 0.25F - f;
-            break;
-         case SOUTH:
-            afloat[2] = 0.73F + f;
-      }
+    private float[] translations(final Direction direction, int dusted) {
+        float[] translations = new float[]{0.5F, 0.0F, 0.5F};
+        float f = (float) dusted / 10 * 0.75F;
 
-      return afloat;
-   }
+        switch (direction) {
+            case EAST:
+                translations[0] = 0.73F + f;
+                break;
+            case WEST:
+                translations[0] = 0.25F - f;
+                break;
+            case UP:
+                translations[1] = 0.25F + f;
+                break;
+            case DOWN:
+                translations[1] = -0.23F - f;
+                break;
+            case NORTH:
+                translations[2] = 0.25F - f;
+                break;
+            case SOUTH:
+                translations[2] = 0.73F + f;
+        }
+
+        return translations;
+    }
 }

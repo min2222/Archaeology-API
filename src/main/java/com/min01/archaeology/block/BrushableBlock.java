@@ -53,11 +53,11 @@ public class BrushableBlock extends BaseEntityBlock implements Fallable {
    }
 
    public void onPlace(@NotNull final BlockState state, final Level level, @NotNull final BlockPos position, @NotNull final BlockState oldState, boolean isMoving) {
-      level.scheduleTick(position, this, 2);
+      level.scheduleTick(position, this, TICK_DELAY);
    }
 
    public @NotNull BlockState updateShape(@NotNull final BlockState state, @NotNull final Direction direction, @NotNull final BlockState neighborState, final LevelAccessor level, @NotNull final BlockPos currentPosition, @NotNull final BlockPos neighborPosition) {
-      level.scheduleTick(currentPosition, this, 2);
+      level.scheduleTick(currentPosition, this, TICK_DELAY);
       return super.updateShape(state, direction, neighborState, level, currentPosition, neighborPosition);
    }
 

@@ -143,20 +143,20 @@ public class DecoratedPotBlockEntity extends BlockEntity implements Randomizable
       return this;
    }
 
-   public void wobble(DecoratedPotBlockEntity.WobbleStyle wobbleStyle) {
+   public void wobble(final DecoratedPotBlockEntity.WobbleStyle wobbleStyle) {
       if (level != null && !level.isClientSide()) {
          level.blockEvent(getBlockPos(), getBlockState().getBlock(), EVENT_POT_WOBBLES, wobbleStyle.ordinal());
       }
    }
 
    @Override
-   public boolean triggerEvent(int i, int duration) {
-      if (level != null && i == EVENT_POT_WOBBLES && duration >= 0 && duration < DecoratedPotBlockEntity.WobbleStyle.values().length) {
+   public boolean triggerEvent(int event, int duration) {
+      if (level != null && event == EVENT_POT_WOBBLES && duration >= 0 && duration < DecoratedPotBlockEntity.WobbleStyle.values().length) {
          wobbleStartedAtTick = level.getGameTime();
          lastWobbleStyle = DecoratedPotBlockEntity.WobbleStyle.values()[duration];
          return true;
       } else {
-         return super.triggerEvent(i, duration);
+         return super.triggerEvent(event, duration);
       }
    }
 
@@ -165,9 +165,9 @@ public class DecoratedPotBlockEntity extends BlockEntity implements Randomizable
 
       @SuppressWarnings("ConstantConditions")
       public CompoundTag save(final CompoundTag tag) {
-         ListTag listtag = new ListTag();
-         sorted().forEach(item -> listtag.add(StringTag.valueOf(ForgeRegistries.ITEMS.getKey(item).toString())));
-         tag.put(TAG_SHERDS, listtag);
+         ListTag listTag = new ListTag();
+         sorted().forEach(item -> listTag.add(StringTag.valueOf(ForgeRegistries.ITEMS.getKey(item).toString())));
+         tag.put(TAG_SHERDS, listTag);
          return tag;
       }
 

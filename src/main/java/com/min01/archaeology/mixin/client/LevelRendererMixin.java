@@ -16,8 +16,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 
+/** Add support for the new brush event */
 @Mixin(LevelRenderer.class)
-public class LevelRendererMixin {
+public abstract class LevelRendererMixin {
+    @SuppressWarnings("ConstantConditions")
     @Inject(method = "levelEvent", at = @At(value = "HEAD"))
     private void handleCustomLevelEvents(int type, final BlockPos position, int data, final CallbackInfo callback) {
         if (type == CustomLevelEvent.PARTICLES_AND_SOUND_BRUSH_BLOCK_COMPLETE) {
@@ -31,5 +33,5 @@ public class LevelRendererMixin {
         }
     }
 
-    @Shadow @Nullable private ClientLevel level;
+    @Shadow private @Nullable ClientLevel level;
 }

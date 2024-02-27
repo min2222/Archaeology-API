@@ -6,11 +6,9 @@
   "refmap": "archaeology.refmap.json",
   "mixins": [
     "MixinDesertPyramidPiece",
-    "MixinStructure",
     "MixinDesertWellFeature",
     "MixinOceanRuinPiece",
-    "MixinTemplateStructurePiece",
-    "TemplateStructurePieceAccessor"
+    "MixinStructure"
   ],
   "client": [
     "client.LevelRendererMixin"

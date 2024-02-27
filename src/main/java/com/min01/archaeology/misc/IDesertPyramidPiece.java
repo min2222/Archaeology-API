@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 
 public interface IDesertPyramidPiece {
-	List<BlockPos> getPotentialSuspiciousSandWorldPositions();
+	List<BlockPos> archaeology$getPotentialSuspiciousSandWorldPositions();
 
-	BlockPos getRandomCollapsedRoofPos();
+	BlockPos archaeology$getRandomCollapsedRoofPos();
 }

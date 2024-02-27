@@ -195,6 +195,19 @@ public class DecoratedPotBlock extends BaseEntityBlock implements SimpleWaterlog
     public @NotNull List<ItemStack> getDrops(@NotNull final BlockState state, final LootContext.Builder builder) {
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof DecoratedPotBlockEntity potEntity) {
             builder.withDynamicDrop(SHERDS_DYNAMIC_DROP_ID, (context, stack) -> potEntity.getDecorations().sorted().map(Item::getDefaultInstance).forEach(stack));
+
+            // FIXME (Workaround) :: The CRACKED will still be `false` even though it was set to `true` (does not happen for projectile breaks)
+            List<ItemStack> drops = super.getDrops(state, builder);
+
+            if (!state.getValue(CRACKED) && builder.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof Player player && player.getMainHandItem().is(ArchaelogyTags.BREAKS_DECORATED_POTS)) {
+                boolean removed = drops.removeIf(stack -> stack.is(asItem()));
+
+                if (removed) {
+                    drops.addAll(potEntity.getDecorations().sorted().map(Item::getDefaultInstance).toList());
+                }
+            }
+
+            return drops;
         }
 
         return super.getDrops(state, builder);
@@ -205,7 +218,7 @@ public class DecoratedPotBlock extends BaseEntityBlock implements SimpleWaterlog
         BlockState newState = state;
 
         if (stack.is(ArchaelogyTags.BREAKS_DECORATED_POTS) && stack.getEnchantmentLevel(Enchantments.SILK_TOUCH) <= 0) {
-            newState = state.setValue(CRACKED, true);
+            newState = state.setValue(CRACKED, Boolean.TRUE);
             level.setBlock(position, newState, Block.UPDATE_INVISIBLE);
         }
 
@@ -224,7 +237,7 @@ public class DecoratedPotBlock extends BaseEntityBlock implements SimpleWaterlog
         super.appendHoverText(stack, blockGetter, tooltips, flag);
         DecoratedPotBlockEntity.Decorations decorations = DecoratedPotBlockEntity.Decorations.load(BlockItem.getBlockEntityData(stack));
 
-        if (decorations != DecoratedPotBlockEntity.Decorations.EMPTY) {
+        if (!decorations.equals(DecoratedPotBlockEntity.Decorations.EMPTY)) {
             tooltips.add(CommonComponents.EMPTY);
             Stream.of(decorations.front(), decorations.left(), decorations.right(), decorations.back()).forEach((item) -> tooltips.add((new ItemStack(item, 1)).getHoverName().plainCopy().withStyle(ChatFormatting.GRAY)));
         }
@@ -239,7 +252,7 @@ public class DecoratedPotBlock extends BaseEntityBlock implements SimpleWaterlog
         BlockPos position = hitResult.getBlockPos();
 
         if (projectile.mayInteract(level, position) && projectile.getType().is(ArchaelogyTags.IMPACT_PROJECTILES)) {
-            level.setBlock(position, state.setValue(CRACKED, true), Block.UPDATE_INVISIBLE);
+            level.setBlock(position, state.setValue(CRACKED, Boolean.TRUE), Block.UPDATE_INVISIBLE);
             level.destroyBlock(position, true, projectile);
         }
     }
