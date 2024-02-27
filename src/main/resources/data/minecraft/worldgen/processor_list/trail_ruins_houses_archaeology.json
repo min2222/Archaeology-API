@@ -49,10 +49,6 @@
         "processor_type": "minecraft:rule",
         "rules": [
           {
-            "block_entity_modifier": {
-              "type": "minecraft:append_loot",
-              "loot_table": "minecraft:archaeology/trail_ruins_common"
-            },
             "input_predicate": {
               "predicate_type": "minecraft:tag_match",
               "tag": "minecraft:trail_ruins_replaceable"
@@ -70,17 +66,14 @@
         ]
       },
       "limit": 6,
-      "processor_type": "minecraft:capped"
+      "processor_type": "minecraft:capped",
+      "loot_table": "minecraft:archaeology/trail_ruins_common"
     },
     {
       "delegate": {
         "processor_type": "minecraft:rule",
         "rules": [
           {
-            "block_entity_modifier": {
-              "type": "minecraft:append_loot",
-              "loot_table": "minecraft:archaeology/trail_ruins_rare"
-            },
             "input_predicate": {
               "predicate_type": "minecraft:tag_match",
               "tag": "minecraft:trail_ruins_replaceable"
@@ -98,7 +91,8 @@
         ]
       },
       "limit": 3,
-      "processor_type": "minecraft:capped"
+      "processor_type": "minecraft:capped",
+      "loot_table": "minecraft:archaeology/trail_ruins_rare"
     }
   ]
 }

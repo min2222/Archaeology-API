@@ -196,7 +196,7 @@ public class DecoratedPotBlock extends BaseEntityBlock implements SimpleWaterlog
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof DecoratedPotBlockEntity potEntity) {
             builder.withDynamicDrop(SHERDS_DYNAMIC_DROP_ID, (context, stack) -> potEntity.getDecorations().sorted().map(Item::getDefaultInstance).forEach(stack));
 
-            // FIXME (Workaround) :: The CRACKED will still be `false` even though it was set to `true` (does not happen for projectile breaks)
+            // FIXME (Workaround) :: CRACKED will still be `false` even though it was set to `true` (does not happen for projectile breaks)
             List<ItemStack> drops = super.getDrops(state, builder);
 
             if (!state.getValue(CRACKED) && builder.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof Player player && shouldDropShards(player)) {
