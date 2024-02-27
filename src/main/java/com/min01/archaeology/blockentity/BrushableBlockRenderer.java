@@ -42,8 +42,8 @@ public class BrushableBlockRenderer implements BlockEntityRenderer<BrushableBloc
                         boolean flag = direction == Direction.EAST || direction == Direction.WEST;
                         pose.mulPose(Vector3f.YP.rotationDegrees((float) ((flag ? 90 : 0) + 11)));
                         pose.scale(0.5F, 0.5F, 0.5F);
-                        int j = LevelRenderer.getLightColor(brushableBlock.getLevel(), brushableBlock.getBlockState(), brushableBlock.getBlockPos().relative(direction));
-                        itemRenderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, j, OverlayTexture.NO_OVERLAY, pose, buffer, 0);
+                        int combinedLight = LevelRenderer.getLightColor(brushableBlock.getLevel(), brushableBlock.getBlockState(), brushableBlock.getBlockPos().relative(direction));
+                        itemRenderer.renderStatic(null, stack, ItemTransforms.TransformType.FIXED, false, pose, buffer, brushableBlock.getLevel(), combinedLight, OverlayTexture.NO_OVERLAY, 0);
                         pose.popPose();
                     }
                 }

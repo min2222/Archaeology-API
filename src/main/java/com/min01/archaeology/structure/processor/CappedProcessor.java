@@ -31,7 +31,7 @@ public class CappedProcessor extends StructureProcessor {
     private final @Nullable ResourceLocation lootTable;
 
     private StructurePlaceSettings previousSettings;
-    private int generated;
+    private int convertedCount;
 
     public CappedProcessor(final StructureProcessor delegate, final IntProvider limit, final @Nullable ResourceLocation lootTable) {
         this.delegate = delegate;
@@ -47,22 +47,22 @@ public class CappedProcessor extends StructureProcessor {
     public @Nullable StructureTemplate.StructureBlockInfo processBlock(@NotNull final LevelReader level, @NotNull final BlockPos position, @NotNull final BlockPos relativePosition, @NotNull final StructureTemplate.StructureBlockInfo structureBlockInfo, @NotNull final StructureTemplate.StructureBlockInfo relativeStructureBlockInfo, @NotNull final StructurePlaceSettings settings) {
         if (/* This processor is (sometimes?) re-used */ previousSettings != settings) {
             previousSettings = settings;
-            generated = 0;
+            convertedCount = 0;
         }
 
-        if (generated == limit.getMaxValue()) {
+        if (convertedCount == limit.getMaxValue()) {
             return relativeStructureBlockInfo;
         }
 
         StructureTemplate.StructureBlockInfo converted = delegate.processBlock(level, position, relativePosition, structureBlockInfo, relativeStructureBlockInfo, settings);
 
         if (converted != null && converted.state.getBlock() instanceof BrushableBlock) {
-            if (/* Hard code this because I can't be bothered anymore */ settings.getRandom(relativePosition).nextDouble() > 0.3) {
+            if (/* Avoid replacing the same block for every generation */ settings.getRandom(relativePosition).nextDouble() > 0.3) {
                 if (lootTable != null && relativeStructureBlockInfo instanceof StructureBlockInfoAccess access) {
                     access.archaeology$addLootTable(BrushableBlockEntity.LOOT_TABLE_TAG, lootTable.toString());
 
-                    if (relativeStructureBlockInfo.state.getBlock() != converted.state.getBlock()) {
-                        generated++;
+                    if (!relativeStructureBlockInfo.state.is(converted.state.getBlock())) {
+                        convertedCount++;
                     }
 
                     return converted;
