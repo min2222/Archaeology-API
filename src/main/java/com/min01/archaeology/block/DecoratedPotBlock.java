@@ -1,10 +1,17 @@
 package com.min01.archaeology.block;
 
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.min01.archaeology.blockentity.DecoratedPotBlockEntity;
 import com.min01.archaeology.init.ArchaelogyTags;
 import com.min01.archaeology.init.ArchaeologyBlockEntityType;
 import com.min01.archaeology.init.ArchaeologyParticleTypes;
 import com.min01.archaeology.init.ArchaeologySounds;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -51,11 +58,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 public class DecoratedPotBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final ResourceLocation SHERDS_DYNAMIC_DROP_ID = new ResourceLocation("sherds");

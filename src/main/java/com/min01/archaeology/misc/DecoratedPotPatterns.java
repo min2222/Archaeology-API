@@ -1,16 +1,18 @@
 package com.min01.archaeology.misc;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.min01.archaeology.init.ArchaeologyItems;
 import com.min01.archaeology.init.ArchaeologyRegistryKey;
+
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-
-import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class DecoratedPotPatterns {
     public static final String BASE_NAME = "decorated_pot_base";

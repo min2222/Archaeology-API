@@ -1,9 +1,18 @@
 package com.min01.archaeology.mixin;
 
+import java.util.Set;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.min01.archaeology.init.ArchaeologyBlockEntityType;
 import com.min01.archaeology.init.ArchaeologyBlocks;
 import com.min01.archaeology.init.ArchaeologyLootTables;
 import com.min01.archaeology.misc.IDesertPyramidPiece;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -21,13 +30,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.structures.DesertPyramidStructure;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Set;
 
 /** Place suspicious sand in the desert pyramid structure */
 @Mixin(Structure.class)

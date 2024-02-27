@@ -16,17 +16,14 @@ public class ArchaelogyTags {
 
 	public static final TagKey<EntityType<?>> IMPACT_PROJECTILES = entityType("impact_projectiles");
 
-	@SuppressWarnings("SameParameterValue")
 	private static TagKey<Block> block(final String path) {
 		return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(path));
 	}
 
-	@SuppressWarnings("SameParameterValue")
 	private static TagKey<Item> item(final String path) {
 		return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(path));
 	}
 
-	@SuppressWarnings("SameParameterValue")
 	private static TagKey<EntityType<?>> entityType(final String path) {
 		return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(path));
 	}

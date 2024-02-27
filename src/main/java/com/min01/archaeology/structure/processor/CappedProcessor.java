@@ -1,22 +1,23 @@
 package com.min01.archaeology.structure.processor;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.min01.archaeology.block.BrushableBlock;
 import com.min01.archaeology.blockentity.BrushableBlockEntity;
 import com.min01.archaeology.init.ArchaeologyStructureProcessorType;
 import com.min01.archaeology.misc.StructureBlockInfoAccess;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class CappedProcessor extends StructureProcessor {
     public static final Codec<CappedProcessor> CODEC = RecordCodecBuilder.create(instance -> instance.group(

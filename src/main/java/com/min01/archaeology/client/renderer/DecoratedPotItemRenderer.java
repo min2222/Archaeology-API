@@ -1,8 +1,11 @@
 package com.min01.archaeology.client.renderer;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.min01.archaeology.blockentity.DecoratedPotBlockEntity;
 import com.min01.archaeology.init.ArchaeologyBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
@@ -12,7 +15,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 public class DecoratedPotItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private final BlockEntityRenderDispatcher dispatcher;

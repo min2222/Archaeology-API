@@ -1,6 +1,7 @@
 package com.min01.archaeology.init;
 
 import com.min01.archaeology.Archaeology;
+
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;

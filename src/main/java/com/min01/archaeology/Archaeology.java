@@ -1,6 +1,13 @@
 package com.min01.archaeology;
 
-import com.min01.archaeology.init.*;
+import com.min01.archaeology.init.ArchaeologyBlockEntityType;
+import com.min01.archaeology.init.ArchaeologyBlocks;
+import com.min01.archaeology.init.ArchaeologyItems;
+import com.min01.archaeology.init.ArchaeologyParticleTypes;
+import com.min01.archaeology.init.ArchaeologyRecipeSerializer;
+import com.min01.archaeology.init.ArchaeologySounds;
+import com.min01.archaeology.init.ArchaeologyStructureProcessor;
+
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;

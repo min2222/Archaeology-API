@@ -1,11 +1,18 @@
 package com.min01.archaeology.item;
 
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.min01.archaeology.block.BrushableBlock;
 import com.min01.archaeology.blockentity.BrushableBlockEntity;
 import com.min01.archaeology.init.ArchaeologyArmPose;
 import com.min01.archaeology.init.ArchaeologySounds;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+
 import net.minecraft.client.model.HumanoidModel.ArmPose;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -36,11 +43,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.ForgeEventFactory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public class BrushItem extends Item {
     public static final int ANIMATION_DURATION = 10;

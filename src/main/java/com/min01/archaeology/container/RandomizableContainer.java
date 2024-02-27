@@ -1,5 +1,7 @@
 package com.min01.archaeology.container;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -17,8 +19,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
 
 public interface RandomizableContainer extends Container {
     String LOOT_TABLE_TAG = "LootTable";

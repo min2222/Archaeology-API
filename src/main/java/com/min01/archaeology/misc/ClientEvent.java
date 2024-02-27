@@ -5,6 +5,7 @@ import com.min01.archaeology.blockentity.DecoratedPotRenderer;
 import com.min01.archaeology.init.ArchaeologyArmPose;
 import com.min01.archaeology.init.ArchaeologyBlockEntityType;
 import com.min01.archaeology.init.ArchaeologyItems;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;

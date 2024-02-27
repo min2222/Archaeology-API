@@ -1,18 +1,24 @@
 package com.min01.archaeology.init;
 
+import java.util.function.Consumer;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.min01.archaeology.Archaeology;
 import com.min01.archaeology.client.renderer.DecoratedPotItemRenderer;
 import com.min01.archaeology.item.BrushItem;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.RecordItem;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 public class ArchaeologyItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Archaeology.MC_ID);
