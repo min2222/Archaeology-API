@@ -45,21 +45,31 @@ public class CappedProcessor extends StructureProcessor {
 
     @Override
     public @Nullable StructureTemplate.StructureBlockInfo processBlock(@NotNull final LevelReader level, @NotNull final BlockPos position, @NotNull final BlockPos relativePosition, @NotNull final StructureTemplate.StructureBlockInfo structureBlockInfo, @NotNull final StructureTemplate.StructureBlockInfo relativeStructureBlockInfo, @NotNull final StructurePlaceSettings settings) {
-        if (generated == limit.getMaxValue() || /* Hard code this because I can't be bothered anymore */ relativeStructureBlockInfo.state.getBlock() instanceof BrushableBlock || /* Avoid converting the same blocks every time */ settings.getRandom(position).nextDouble() < 0.3) {
-            return relativeStructureBlockInfo;
-        }
-
         if (/* This processor is (sometimes?) re-used */ previousSettings != settings) {
             previousSettings = settings;
             generated = 0;
         }
 
-        if (lootTable != null && relativeStructureBlockInfo instanceof StructureBlockInfoAccess access) {
-            access.archaeology$addLootTable(BrushableBlockEntity.LOOT_TABLE_TAG, lootTable.toString());
+        if (generated == limit.getMaxValue()) {
+            return relativeStructureBlockInfo;
         }
 
-        generated++;
+        StructureTemplate.StructureBlockInfo converted = delegate.processBlock(level, position, relativePosition, structureBlockInfo, relativeStructureBlockInfo, settings);
 
-        return delegate.processBlock(level, position, relativePosition, structureBlockInfo, relativeStructureBlockInfo, settings);
+        if (converted != null && converted.state.getBlock() instanceof BrushableBlock) {
+            if (/* Hard code this because I can't be bothered anymore */ settings.getRandom(relativePosition).nextDouble() > 0.3) {
+                if (lootTable != null && relativeStructureBlockInfo instanceof StructureBlockInfoAccess access) {
+                    access.archaeology$addLootTable(BrushableBlockEntity.LOOT_TABLE_TAG, lootTable.toString());
+
+                    if (relativeStructureBlockInfo.state.getBlock() != converted.state.getBlock()) {
+                        generated++;
+                    }
+
+                    return converted;
+                }
+            }
+        }
+
+        return relativeStructureBlockInfo;
     }
 }
