@@ -35,6 +35,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -126,7 +127,10 @@ public class BrushItem extends Item {
                             if (level.getBlockEntity(position) instanceof BrushableBlockEntity brushableEntity) {
                                 if (brushableEntity.brush(level.getGameTime(), player, blockhitresult.getDirection())) {
                                     EquipmentSlot equipmentslot = stack.equals(player.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
-                                    stack.hurtAndBreak(1, entity, breaker -> breaker.broadcastBreakEvent(equipmentslot));
+                                    stack.hurtAndBreak(1, entity, breaker -> {
+                                        breaker.broadcastBreakEvent(equipmentslot);
+                                        ForgeEventFactory.onPlayerDestroyItem(player, stack, breaker.getUsedItemHand());
+                                    });
                                 }
                             }
                         }
